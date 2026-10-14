@@ -1,1 +1,27 @@
-{"expo":{"name":"Resume Customizer","slug":"resume-customizer","scheme":"resume-customizer","version":"1.0.0","orientation":"portrait","userInterfaceStyle":"light","backgroundColor":"#000000","ios":{"bundleIdentifier":"com.example.resumecustomizer"},"android":{"package":"com.example.resumecustomizer"},"plugins":["expo-router","expo-secure-store"]}}
+{
+  "expo": {
+    "name": "Resume Customizer",
+    "slug": "resume-customizer",
+    "scheme": "resume-customizer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#000000",
+    "ios": {
+      "bundleIdentifier": "com.example.resumecustomizer"
+    },
+    "android": {
+      "package": "com.example.resumecustomizer"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f01cff5c-9858-4533-9454-4a1ffa523f39"
+      }
+    }
+  }
+}
