@@ -1,0 +1,1 @@
+{"expo":{"name":"Resume Customizer","slug":"resume-customizer","scheme":"resume-customizer","version":"1.0.0","orientation":"portrait","userInterfaceStyle":"light","backgroundColor":"#000000","ios":{"bundleIdentifier":"com.example.resumecustomizer"},"android":{"package":"com.example.resumecustomizer"},"plugins":["expo-router","expo-secure-store"]}}
