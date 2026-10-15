@@ -8,10 +8,14 @@
     "userInterfaceStyle": "light",
     "backgroundColor": "#000000",
     "ios": {
-      "bundleIdentifier": "com.example.resumecustomizer"
+      "bundleIdentifier": "com.example.resumecustomizer",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
-      "package": "com.example.resumecustomizer"
+      "package": "com.example.resumecustomizer",
+      "runtimeVersion": "1.0.0"
     },
     "plugins": [
       "expo-router",
@@ -22,6 +26,9 @@
       "eas": {
         "projectId": "f01cff5c-9858-4533-9454-4a1ffa523f39"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/f01cff5c-9858-4533-9454-4a1ffa523f39"
     }
   }
 }

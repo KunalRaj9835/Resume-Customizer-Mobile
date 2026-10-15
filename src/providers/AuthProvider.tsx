@@ -31,10 +31,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let invalidating = false;
-    setSessionInvalidHandler(() => {
+    setSessionInvalidHandler((code?: string) => {
       if (registering.current) return; // ignore 401s while the login is still registering
       if (invalidating) return; invalidating = true;
-      signOut('Your session expired or was signed in elsewhere. Please sign in again.').finally(() => (invalidating = false));
+      signOut(`Signed out (${code || 'unknown'}). Please sign in again.`).finally(() => (invalidating = false));
     });
     supabase.auth.getSession().then(({ data }) => { setSession(data.session); setLoading(false); });
     const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (e || !data?.url) throw e ?? new Error('No auth URL');
 
       const res = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
-      if (res.type !== 'success') { setError('Sign-in was cancelled.'); return; }
+      if (res.type !== 'success') { setError(`Sign-in was cancelled. (${res.type})`); return; }
 
       const code = new URL(res.url).searchParams.get('code');
       if (!code) throw new Error('Invalid callback: missing code.');

@@ -20,15 +20,15 @@ export const sessionStore = {
   set: (v: string) => SecureStore.setItemAsync(SESSION_KEY, v),
   clear: () => SecureStore.deleteItemAsync(SESSION_KEY),
 };
-let onSessionInvalid: () => void = () => {};
-export const setSessionInvalidHandler = (fn: () => void) => { onSessionInvalid = fn; };
+// Called on any 401 with the backend's error code (e.g. session_revoked, session_not_found, token_expired).
+let onSessionInvalid: (code?: string) => void = () => {};
+export const setSessionInvalidHandler = (fn: (code?: string) => void) => { onSessionInvalid = fn; };
 
+// The backend identifies the session from the JWT's session_id claim, so only Authorization is sent.
 async function headers(extra: Record<string, string> = {}) {
   const { data } = await supabase.auth.getSession();
   const h: Record<string, string> = { ...extra };
   if (data.session) h.Authorization = `Bearer ${data.session.access_token}`;
-  const sid = await sessionStore.get();
-  if (sid) h['X-Session-ID'] = sid; // ASSUMPTION: confirm header name against backend
   return h;
 }
 async function request(path: string, init: RequestInit = {}, timeout = 30000): Promise<Response> {
@@ -36,10 +36,10 @@ async function request(path: string, init: RequestInit = {}, timeout = 30000): P
   const t = setTimeout(() => ctrl.abort(), timeout);
   try {
     const res = await fetch(BASE + path, { ...init, signal: ctrl.signal, headers: await headers(init.headers as any) });
-    if (res.status === 401) onSessionInvalid(); // 403 = ownership error, not a dead session
     if (!res.ok) {
       let detail = '', code = '';
       try { const b = await res.json(); detail = b?.error?.message ?? (typeof b.detail === 'string' ? b.detail : ''); code = b?.error?.code ?? ''; } catch {}
+      if (res.status === 401) onSessionInvalid(code); // 403 = ownership error, not a dead session
       const e = new ApiError(res.status, CODES[code] ?? (detail || MESSAGES[res.status] || `Request failed (${res.status}).`)); e.code = code; throw e;
     }
     return res;
